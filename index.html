@@ -3,12 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>EWINTH REVENGE | Ultra Web App</title>
+    <title>EWINTH REVENGE</title>
     
     <meta name="theme-color" content="#9d4edd">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="manifest" href="data:application/manifest+json,{'name':'Ewinth Revenge','short_name':'Ewinth','start_url':'.','display':'standalone','background_color':'#030303','theme_color':'#9d4edd','icons':[{'src':'https://via.placeholder.com/192/9d4edd/ffffff?text=ER','sizes':'192x192','type':'image/png'}]}">
+    <meta name="apple-mobile-web-app-title" content="EWINTH REVENGE">
+    
+    <link rel="manifest" href="data:application/manifest+json,{'name':'EWINTH REVENGE','short_name':'Ewinth','start_url':'.','display':'standalone','background_color':'#030303','theme_color':'#9d4edd','icons':[{'src':'https://via.placeholder.com/192/9d4edd/ffffff?text=ER','sizes':'192x192','type':'image/png'},{'src':'https://via.placeholder.com/512/9d4edd/ffffff?text=ER','sizes':'512x512','type':'image/png'}]}">
 
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -34,20 +37,20 @@
         .content.active { display: block; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* --- PLAYER VIEW --- */
+        /* PLAYER VIEW */
         .player-view { display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; }
-        .album-art-main { width: 65vw; max-width: 250px; aspect-ratio: 1; border-radius: 40px; object-fit: cover; box-shadow: 0 20px 80px rgba(0,0,0,1); margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); }
+        .album-art-main { width: 65vw; max-width: 250px; aspect-ratio: 1; border-radius: 40px; object-fit: cover; box-shadow: 0 20px 80px rgba(0,0,0,1); border: 1px solid rgba(255,255,255,0.1); }
         
-        #visualizer { width: 100%; height: 50px; margin-bottom: 10px; }
+        /* SPECTRUM LIMITED TO ALBUM WIDTH */
+        #visualizer { width: 65vw; max-width: 250px; height: 40px; margin: 10px 0; }
 
-        .side-vol-wrapper { position: absolute; right: -10px; top: 35%; display: flex; flex-direction: column; align-items: center; z-index: 100; }
+        .side-vol-wrapper { position: absolute; right: -10px; top: 30%; display: flex; flex-direction: column; align-items: center; z-index: 100; }
         .vol-btn { background: var(--surface); border: none; color: white; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: var(--neon); }
         .vol-slider-container { background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); padding: 25px 5px; border-radius: 20px; display: none; flex-direction: column; align-items: center; margin-top: 10px; border: 1px solid var(--accent); }
-        .vol-slider-container.show { display: flex; }
+        .vol-slider-container.show { display: flex; animation: slideDown 0.2s ease; }
         .vol-slider-vertical { -webkit-appearance: none; width: 100px; height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; transform: rotate(-90deg); margin: 50px -40px; outline: none; }
         .vol-slider-vertical::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; background: white; border-radius: 50%; box-shadow: var(--neon); }
 
-        /* NEON PROGRESS */
         .controls { width: 100%; max-width: 380px; }
         .bar-bg { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; cursor: pointer; margin-bottom: 10px; position: relative; }
         .bar-fill { height: 100%; background: var(--accent); width: 0%; border-radius: 10px; box-shadow: var(--neon); position: relative; }
@@ -63,7 +66,7 @@
         .pre-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; font-size: 8px; padding: 8px 2px; border-radius: 8px; cursor: pointer; font-weight: bold; }
         .pre-btn.active { background: var(--accent); box-shadow: var(--neon); border-color: white; }
 
-        /* --- LIBRARY VIEW --- */
+        /* LIBRARY */
         .search-box { position: relative; margin-bottom: 15px; }
         .search-input { width: 100%; background: var(--surface); border: 1px solid rgba(255,255,255,0.1); padding: 12px 15px 12px 40px; border-radius: 15px; color: white; outline: none; }
         .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-dim); }
@@ -76,16 +79,13 @@
         .grid-container.grid-mode .song-card img { width: 100%; aspect-ratio: 1; border-radius: 12px; object-fit: cover; }
         
         .grid-container.list-mode .song-card { background: var(--surface); padding: 12px; border-radius: 15px; display: flex; align-items: center; gap: 15px; margin-bottom: 10px; }
-        .grid-container.list-mode .song-card img { width: 55px; height: 55px; border-radius: 10px; }
+        .grid-container.list-mode .song-card img { width: 55px; height: 55px; border-radius: 10px; object-fit: cover; }
         .grid-container.list-mode .song-card .info { font-size: 14px; font-weight: 700; }
 
-        /* --- CONTACT --- */
-        .contact-card { background: var(--surface); padding: 30px 20px; border-radius: 25px; text-align: center; border: 1px solid var(--accent); }
-        .contact-btn { display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; margin: 10px 0; text-decoration: none; color: white; font-weight: 700; }
-        
         .nav-bottom { height: 75px; display: flex; align-items: center; justify-content: space-around; background: rgba(0,0,0,0.95); backdrop-filter: blur(20px); position: fixed; bottom: 0; width: 100%; border-top: 1px solid rgba(157, 78, 221, 0.2); }
-        .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-dim); }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-dim); cursor: pointer; }
         .nav-item.active { color: var(--accent); text-shadow: var(--neon); }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -105,10 +105,11 @@
             </div>
 
             <img src="" id="p-img" class="album-art-main" onerror="this.src='https://via.placeholder.com/300/111/9d4edd?text=ER'">
+            
             <canvas id="visualizer"></canvas>
 
-            <h1 class="song-title" id="p-title" style="font-size: 20px; margin: 0;">Pilih Lagu</h1>
-            <p class="song-artist" id="p-artist" style="color: var(--accent); font-weight: 800; font-size: 13px; margin: 5px 0 15px 0;">EWINTH REVENGE</p>
+            <h1 class="song-title" id="p-title" style="font-size: 18px; margin: 0;">Pilih Lagu</h1>
+            <p class="song-artist" id="p-artist" style="color: var(--accent); font-weight: 800; font-size: 12px; margin: 5px 0 15px 0;">EWINTH REVENGE</p>
 
             <div class="controls">
                 <div class="bar-bg" id="seek-bar"><div class="bar-fill" id="bar-fill"></div></div>
@@ -133,7 +134,7 @@
                         <div style="display:flex; align-items:center; gap:10px;"><span style="font-size:9px; width:40px; color:var(--accent);">TREB</span><input type="range" class="vol-slider-vertical" style="transform:none; width:100%; height:8px; margin:0;" min="0" max="2" step="0.1" value="1" oninput="setEQ('treble', this.value)"></div>
                     </div>
                 </div>
-                <div class="panel" id="lyrics-panel"><div id="lyrics-content" style="font-size:14px; line-height:1.6; text-shadow: var(--neon);"></div></div>
+                <div class="panel" id="lyrics-panel"><div id="lyrics-content" style="font-size:14px; line-height:1.6; text-shadow: var(--neon); white-space: pre-wrap;"></div></div>
             </div>
         </div>
     </div>
@@ -142,7 +143,7 @@
         <h2 style="font-weight:900;">LIBRARY</h2>
         <div class="search-box">
             <i data-lucide="search" size="18" class="search-icon"></i>
-            <input type="text" class="search-input" id="search-input" placeholder="Cari judul lagu..." onkeyup="filterSongs()">
+            <input type="text" class="search-input" id="search-input" placeholder="Cari musik..." onkeyup="filterSongs()">
         </div>
         <div class="view-controls">
             <button class="view-btn active" id="grid-btn" onclick="setLibraryView('grid')"><i data-lucide="layout-grid" size="18"></i></button>
@@ -153,9 +154,9 @@
 
     <div id="tab-contact-content" class="content">
         <div class="contact-card">
-            <h2 style="font-weight:900; margin-bottom:20px;">HUBUNGI SAYA</h2>
-            <a href="mailto:ceritasemalam001@gmail.com" class="contact-btn"><i data-lucide="mail" style="margin-right:12px"></i> ceritasemalam001@gmail.com</a>
-            <a href="https://wa.me/6283862722618" class="contact-btn"><i data-lucide="message-circle" style="margin-right:12px"></i> 083862722618</a>
+            <h2 style="font-weight:900; margin-bottom:20px;">HUBUNGI</h2>
+            <a href="mailto:ceritasemalam001@gmail.com" class="contact-btn" style="text-decoration:none;"><i data-lucide="mail" style="margin-right:12px"></i> ceritasemalam001@gmail.com</a>
+            <a href="https://wa.me/6283862722618" class="contact-btn" style="text-decoration:none;"><i data-lucide="message-circle" style="margin-right:12px"></i> 083862722618</a>
             <div style="margin-top:40px; font-size:10px; font-weight:900; opacity:0.5; letter-spacing:2px;">2026 POWERED BY <span style="color:var(--accent)">EWINTH REVENGE</span></div>
         </div>
     </div>
@@ -169,14 +170,23 @@
     <audio id="audio-player" crossorigin="anonymous"></audio>
 
     <script>
+        // SERVICE WORKER FOR INSTALLATION
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                const sw = `self.addEventListener('fetch', function(e){ e.respondWith(fetch(e.request)); });`;
+                const blob = new Blob([sw], {type: 'text/javascript'});
+                navigator.serviceWorker.register(URL.createObjectURL(blob));
+            });
+        }
+
         const audio = document.getElementById('audio-player');
-        let audioCtx, analyser, source, bassNode, midNode, trebleNode, currentView = 'grid';
+        let audioCtx, analyser, source, bassNode, midNode, trebleNode, currentView = 'grid', index = 0;
         const canvas = document.getElementById('visualizer');
         const ctx = canvas.getContext('2d');
 
         const songs = [
-            { title: "Left For Dead", artist: "Ewinth Revenge", file: "left for dead.mp3", img: "left for dead.jpeg", lirik: "Terjebak dalam sepi..." },
-            { title: "Takdir Memisahkan", artist: "Ewinth Revenge", file: "takdir memisahkan.mp3", img: "takdir memisahkan.jpeg", lirik: "Berjalan sendiri..." }
+            { title: "Left For Dead", artist: "Ewinth Revenge", file: "left for dead.mp3", img: "left for dead.jpeg", lirik: "Terjebak dalam sepi...\nWaktu seolah berhenti..." },
+            { title: "Takdir Memisahkan", artist: "Ewinth Revenge", file: "takdir memisahkan.mp3", img: "takdir memisahkan.jpeg", lirik: "Berjalan di bawah hujan...\nMencari arti kenangan..." }
         ];
 
         const presets = { 'Normal': [1,1,1], 'Bass': [1.9,1.1,0.6], 'Rock': [1.6,0.8,1.5], 'Pop': [1.1,1.4,1.3], 'Jazz': [1.2,1.2,1.5], 'Classic': [0.9,1.1,1.7], 'Dance': [1.8,1,1.5], 'Electro': [1.6,1,1.9], 'Vocal': [0.7,1.8,1.2], 'Treble': [0.6,1,2.0] };
@@ -199,13 +209,13 @@
             const dataArray = new Uint8Array(bufferLength);
             analyser.getByteFrequencyData(dataArray);
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            const barWidth = (canvas.width / 45);
+            const barWidth = (canvas.width / 30);
             let x = 0;
-            for(let i = 0; i < 45; i++) {
-                const barHeight = dataArray[i] / 5;
+            for(let i = 0; i < 30; i++) {
+                const barHeight = dataArray[i] / 6;
                 ctx.fillStyle = '#9d4edd';
-                ctx.shadowBlur = 8; ctx.shadowColor = '#9d4edd';
-                ctx.fillRect(x, canvas.height - barHeight, barWidth - 2, barHeight);
+                ctx.shadowBlur = 10; ctx.shadowColor = '#9d4edd';
+                ctx.fillRect(x, canvas.height - barHeight, barWidth - 3, barHeight);
                 x += barWidth;
             }
         }
@@ -240,12 +250,12 @@
             container.className = `grid-container ${currentView}-mode`;
             container.innerHTML = filtered.map(s => `
                 <div class="song-card" onclick="playSong(${songs.indexOf(s)})">
-                    <img src="${encodeURIComponent(s.img)}" onerror="this.src='https://via.placeholder.com/150/111/9d4edd?text=ER'">
-                    <div class="info" style="margin-top:8px;">${s.title}</div>
+                    <img src="${encodeURIComponent(s.img)}">
+                    <div class="info" style="margin-top:8px; font-weight:800;">${s.title}</div>
                 </div>`).join('');
         }
 
-        function playSong(i) { loadSong(i); audio.play(); updateUI(true); switchTab('home'); initAudio(); }
+        function playSong(i) { index = i; loadSong(i); audio.play(); updateUI(true); switchTab('home'); initAudio(); }
         function loadSong(i) {
             const s = songs[i];
             audio.src = encodeURIComponent(s.file);
@@ -264,6 +274,9 @@
             document.getElementById(`tab-${t}-content`).classList.add('active');
             document.getElementById(`nav-${t}`).classList.add('active');
         }
+
+        function next() { index = (index + 1) % songs.length; playSong(index); }
+        function prev() { index = (index - 1 + songs.length) % songs.length; playSong(index); }
 
         audio.ontimeupdate = () => { if(audio.duration) { 
             document.getElementById('bar-fill').style.width = (audio.currentTime/audio.duration)*100+"%"; 
