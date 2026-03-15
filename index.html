@@ -16,6 +16,7 @@
             --surface: rgba(255, 255, 255, 0.08);
             --text: #ffffff;
             --neon: 0 0 15px rgba(157, 78, 221, 0.9);
+            --premium-gradient: linear-gradient(145deg, rgba(157, 78, 221, 0.2) 0%, rgba(0, 0, 0, 0) 100%);
         }
 
         * { box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
@@ -44,7 +45,6 @@
         .opt-btns { display: flex; justify-content: center; gap: 8px; margin-top: 10px; }
         .pre-btn { background: var(--surface); border: 1px solid rgba(255,255,255,0.1); color: white; font-size: 9px; padding: 10px; border-radius: 10px; cursor: pointer; font-weight: bold; }
 
-        /* VOLUME AUTO-HIDE STYLING */
         #vol-popover { position: absolute; bottom: 85px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.9); padding: 20px 10px; border-radius: 15px; border: 1px solid var(--accent); display: none; z-index: 100; }
         #vol-popover.active { display: block; animation: slideUp 0.2s ease; }
         .vol-slider { -webkit-appearance: none; width: 120px; height: 4px; background: #333; transform: rotate(-90deg); margin: 50px -50px; outline: none; border-radius: 5px; }
@@ -58,20 +58,35 @@
         .eq-input { flex: 1; -webkit-appearance: none; height: 4px; background: #333; border-radius: 5px; outline: none; }
         .eq-input::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; background: white; border-radius: 50%; }
 
-        /* LIBRARY & KONTAK */
+        /* LIBRARY GRID 12X12 (120px fixed) */
         .search-box { position: relative; margin-bottom: 15px; }
         .search-input { width: 100%; background: var(--surface); border: 1px solid rgba(255,255,255,0.1); padding: 12px 15px 12px 40px; border-radius: 15px; color: white; outline: none; }
         .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-dim); }
-        .grid-container.grid-mode { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; }
-        .grid-container.list-mode .song-card { display: flex; align-items: center; gap: 15px; padding: 10px; background: var(--surface); margin-bottom: 8px; border-radius: 12px; }
-        .grid-container.list-mode .song-card img { width: 50px; height: 50px; border-radius: 8px; }
+        
+        .grid-container.grid-mode { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
+        .grid-container.grid-mode .song-card { width: 120px; text-align: center; }
+        .grid-container.grid-mode img { width: 120px; height: 120px; border-radius: 12px; object-fit: cover; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .grid-container.grid-mode .song-title { font-size: 10px; margin-top: 8px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #ccc; }
 
-        .contact-card { background: var(--surface); padding: 25px; border-radius: 20px; border: 1px solid rgba(157, 78, 221, 0.2); text-align: center; }
-        .powered-text { margin-top: 35px; font-size: 10px; font-weight: 900; color: var(--accent); letter-spacing: 3px; text-transform: uppercase; }
+        .grid-container.list-mode .song-card { display: flex; align-items: center; gap: 15px; padding: 10px; background: var(--surface); margin-bottom: 8px; border-radius: 12px; width: 100%; }
+        .grid-container.list-mode img { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; }
+
+        /* PREMIUM CONTACT */
+        .contact-container { display: flex; flex-direction: column; gap: 15px; margin-top: 10px; }
+        .contact-item { background: var(--premium-gradient); border: 1px solid rgba(157, 78, 221, 0.3); padding: 22px; border-radius: 24px; display: flex; align-items: center; text-decoration: none; color: white; transition: 0.3s; backdrop-filter: blur(10px); }
+        .contact-item:active { transform: scale(0.96); background: rgba(157, 78, 221, 0.2); }
+        .icon-box { width: 50px; height: 50px; background: rgba(157, 78, 221, 0.1); border: 1px solid var(--accent); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-right: 18px; box-shadow: var(--neon); }
+        .contact-text h4 { margin: 0; font-size: 10px; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; font-weight: 900; }
+        .contact-text p { margin: 4px 0 0 0; font-size: 14px; font-weight: 500; opacity: 0.9; }
+
+        .powered-footer { margin-top: 40px; text-align: center; }
+        .foundation-text { font-size: 9px; font-weight: 900; color: var(--accent); letter-spacing: 4px; text-transform: uppercase; opacity: 0.8; margin-top: 10px; }
 
         .nav-bottom { height: 75px; display: flex; align-items: center; justify-content: space-around; background: rgba(0,0,0,0.95); position: fixed; bottom: 0; width: 100%; border-top: 1px solid rgba(157, 78, 221, 0.2); }
-        .nav-item { display: flex; flex-direction: column; align-items: center; color: #555; cursor: pointer; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: #555; cursor: pointer; transition: 0.3s; }
         .nav-item.active { color: var(--accent); }
+        .nav-label { font-size: 9px; font-weight: 800; margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
+
         @keyframes slideUp { from { opacity: 0; transform: translate(-50%, 10px); } to { opacity: 1; transform: translate(-50%, 0); } }
     </style>
 </head>
@@ -93,7 +108,6 @@
                 <div style="display:flex; justify-content:space-between; font-size:10px; margin-bottom:15px; font-weight:900;">
                     <span id="time-now">0:00</span><span id="time-total">0:00</span>
                 </div>
-
                 <div class="main-btns">
                     <i data-lucide="skip-back" onclick="prev()"></i>
                     <div onclick="toggle()" style="background:white; color:black; width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer;">
@@ -101,17 +115,12 @@
                     </div>
                     <i data-lucide="skip-forward" onclick="next()"></i>
                 </div>
-
                 <div class="opt-btns">
                     <button class="pre-btn" onclick="toggleVolumePop()"><i data-lucide="volume-2" size="14"></i></button>
                     <button class="pre-btn" onclick="togglePanel('lyrics')">LYRICS</button>
                     <button class="pre-btn" onclick="togglePanel('eq')">MANUAL EQ</button>
                 </div>
-
-                <div id="vol-popover">
-                    <input type="range" class="vol-slider" min="0" max="1" step="0.01" value="1" oninput="setAudioVolume(this.value)">
-                </div>
-
+                <div id="vol-popover"><input type="range" class="vol-slider" min="0" max="1" step="0.01" value="1" oninput="setAudioVolume(this.value)"></div>
                 <div class="panel" id="eq-panel">
                     <div id="preset-grid" style="display:grid; grid-template-columns: repeat(5, 1fr); gap:5px; margin-bottom:15px;"></div>
                     <div class="eq-sliders">
@@ -120,10 +129,7 @@
                         <div class="eq-row"><span>TREB</span><input type="range" class="eq-input" min="0" max="2" step="0.1" value="1" oninput="setEQ('treble', this.value)"></div>
                     </div>
                 </div>
-
-                <div class="panel" id="lyrics-panel">
-                    <div id="lyrics-content" style="white-space: pre-wrap; font-size: 14px; text-shadow: var(--neon);"></div>
-                </div>
+                <div class="panel" id="lyrics-panel"><div id="lyrics-content" style="white-space: pre-wrap; font-size: 14px; text-shadow: var(--neon);"></div></div>
             </div>
         </div>
     </div>
@@ -142,21 +148,28 @@
     </div>
 
     <div id="tab-contact-content" class="content">
-        <h2 style="font-weight:900;">KONTAK</h2>
-        <div class="contact-card">
-            <p style="font-size: 14px; margin-bottom: 5px; font-weight: 800;">EWINTH REVENGE</p>
-            <div style="display:flex; flex-direction:column; gap:12px; text-align: left; margin-top: 20px;">
-                <div style="font-size:13px;"><i data-lucide="message-circle" size="14" style="vertical-align:middle; margin-right:10px; color:var(--accent);"></i> 083862722618</div>
-                <div style="font-size:13px;"><i data-lucide="mail" size="14" style="vertical-align:middle; margin-right:10px; color:var(--accent);"></i> ceritasemalam001@gmail.com</div>
-            </div>
-            <div class="powered-text">EWINTH REVENGE</div>
+        <h2 style="font-weight:900; margin-bottom: 5px;">KONTAK ME</h2>
+        <p style="font-size: 11px; opacity: 0.5; margin-bottom: 25px; letter-spacing: 1px;">EWINTH REVENGE OFFICIAL HUB</p>
+        <div class="contact-container">
+            <a href="https://wa.me/6283862722618" class="contact-item">
+                <div class="icon-box"><i data-lucide="message-circle" color="#9d4edd"></i></div>
+                <div class="contact-text"><h4>WhatsApp</h4><p>+62 838-6272-2618</p></div>
+            </a>
+            <a href="mailto:ceritasemalam001@gmail.com" class="contact-item">
+                <div class="icon-box"><i data-lucide="mail" color="#9d4edd"></i></div>
+                <div class="contact-text"><h4>Official Email</h4><p>ceritasemalam001@gmail.com</p></div>
+            </a>
+        </div>
+        <div class="powered-footer">
+            <div style="font-size: 12px; font-weight: 900; letter-spacing: 2px;">EWINTH REVENGE</div>
+            <div class="foundation-text">POWERED BY EWINTH.REVENGE.FOUNDATION</div>
         </div>
     </div>
 
     <div class="nav-bottom">
-        <div class="nav-item active" onclick="switchTab('home')" id="nav-home"><i data-lucide="music"></i></div>
-        <div class="nav-item" onclick="switchTab('explore')" id="nav-explore"><i data-lucide="layout-grid"></i></div>
-        <div class="nav-item" onclick="switchTab('contact')" id="nav-contact"><i data-lucide="mail"></i></div>
+        <div class="nav-item active" onclick="switchTab('home')" id="nav-home"><i data-lucide="music"></i><span class="nav-label">NOW PLAYING</span></div>
+        <div class="nav-item" onclick="switchTab('explore')" id="nav-explore"><i data-lucide="layout-grid"></i><span class="nav-label">LIBRARY</span></div>
+        <div class="nav-item" onclick="switchTab('contact')" id="nav-contact"><i data-lucide="mail"></i><span class="nav-label">KONTAK ME</span></div>
     </div>
 
     <audio id="audio-player" crossorigin="anonymous"></audio>
@@ -167,9 +180,11 @@
         const canvas = document.getElementById('visualizer');
         const ctx = canvas.getContext('2d');
 
+        /* CARA MENAMBAHKAN LAGU: Cukup tambahkan baris di dalam kurung [ ] di bawah ini */
         const songs = [
             { title: "Left For Dead", artist: "Ewinth Revenge", file: "left for dead.mp3", img: "left for dead.jpeg", lirik: "Terjebak dalam sepi...\nWaktu seolah berhenti..." },
-            { title: "Takdir Memisahkan", artist: "Ewinth Revenge", file: "takdir memisahkan.mp3", img: "takdir memisahkan.jpeg", lirik: "Berjalan di bawah hujan...\nMencari arti kenangan..." }
+            { title: "Takdir Memisahkan", artist: "Ewinth Revenge", file: "takdir memisahkan.mp3", img: "takdir memisahkan.jpeg", lirik: "Berjalan di bawah hujan...\nMencari arti kenangan..." },
+            /* Contoh tambah lagu: { title: "Judul Lagu", artist: "Ewinth Revenge", file: "namafile.mp3", img: "gambar.jpg", lirik: "Lirik di sini" }, */
         ];
 
         const presets = { 'Normal': [1,1,1], 'Bass': [1.8,1,0.6], 'Rock': [1.5,0.8,1.4], 'Pop': [1.1,1.3,1.2], 'Jazz': [1.2,1.1,1.4], 'Classic': [0.8,1,1.6], 'Dance': [1.7,1,1.5], 'Electro': [1.6,1,1.8], 'Vocal': [0.6,1.7,1.1], 'Treble': [0.5,1,1.9] };
@@ -201,28 +216,15 @@
         function toggleVolumePop() {
             const pop = document.getElementById('vol-popover');
             pop.classList.toggle('active');
-            if(pop.classList.contains('active')) {
-                clearTimeout(volTimer);
-                volTimer = setTimeout(() => pop.classList.remove('active'), 3000);
-            }
+            if(pop.classList.contains('active')) { clearTimeout(volTimer); volTimer = setTimeout(() => pop.classList.remove('active'), 3000); }
         }
 
         function setAudioVolume(v) {
             audio.volume = v;
-            clearTimeout(volTimer);
-            volTimer = setTimeout(() => document.getElementById('vol-popover').classList.remove('active'), 3000);
+            clearTimeout(volTimer); volTimer = setTimeout(() => document.getElementById('vol-popover').classList.remove('active'), 3000);
         }
 
         function setEQ(band, v) { initAudio(); let gain = (v - 1) * 20; if(band==='bass') bassNode.gain.value = gain; if(band==='mid') midNode.gain.value = gain; if(band==='treble') trebleNode.gain.value = gain; }
-        
-        function applyPre(name) {
-            const [b, m, t] = presets[name];
-            setEQ('bass', b); setEQ('mid', m); setEQ('treble', t);
-            document.querySelectorAll('.eq-input')[0].value = b;
-            document.querySelectorAll('.eq-input')[1].value = m;
-            document.querySelectorAll('.eq-input')[2].value = t;
-        }
-
         function setView(v) { currentView = v; filterSongs(); }
 
         function filterSongs() {
@@ -233,7 +235,7 @@
             container.innerHTML = filtered.map((s, i) => `
                 <div class="song-card" onclick="playIdx(${songs.indexOf(s)})">
                     <img src="${encodeURIComponent(s.img)}">
-                    <div style="font-size:10px; font-weight:800; ${currentView==='grid'?'margin-top:8px':''};">${s.title}</div>
+                    <div class="song-title">${s.title}</div>
                 </div>`).join('');
         }
 
