@@ -1,21 +1,24 @@
 {
-  "name": "EWINTH REVENGE",
+  "name": "Ewinth Revenge Official",
   "short_name": "Ewinth",
-  "start_url": "index.html",
+  "description": "Premium Music Player by Ewinth Revenge",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#030303",
   "theme_color": "#9d4edd",
+  "orientation": "portrait",
   "icons": [
     {
-      "src": "https://via.placeholder.com/192/9d4edd/ffffff?text=ER",
+      "src": "icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "https://via.placeholder.com/512/9d4edd/ffffff?text=ER",
+      "src": "icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
