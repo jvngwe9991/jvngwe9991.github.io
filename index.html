@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>EWINTH REVENGE | Ultra App 2026</title>
+    <title>EWINTH REVENGE | Ultra Web App</title>
     
     <meta name="theme-color" content="#9d4edd">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="manifest" href="data:application/manifest+json,{'name':'Ewinth Revenge','short_name':'Ewinth','start_url':'.','display':'standalone','background_color':'#030303','theme_color':'#9d4edd','icons':[{'src':'https://via.placeholder.com/192/9d4edd/ffffff?text=ER','sizes':'192x192','type':'image/png'},{'src':'https://via.placeholder.com/512/9d4edd/ffffff?text=ER','sizes':'512x512','type':'image/png'}]}">
+    <link rel="manifest" href="data:application/manifest+json,{'name':'Ewinth Revenge','short_name':'Ewinth','start_url':'.','display':'standalone','background_color':'#030303','theme_color':'#9d4edd','icons':[{'src':'https://via.placeholder.com/192/9d4edd/ffffff?text=ER','sizes':'192x192','type':'image/png'}]}">
 
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -18,80 +18,74 @@
             --surface: rgba(255, 255, 255, 0.08);
             --text: #ffffff;
             --text-dim: #b3b3b3;
+            --neon: 0 0 15px rgba(157, 78, 221, 0.9);
         }
 
         * { box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: var(--text); margin: 0; height: 100vh; overflow: hidden; position: fixed; width: 100%; }
 
-        #bg-blur { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; filter: blur(80px) brightness(0.15); z-index: -2; transition: 0.8s; }
+        #bg-blur { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; filter: blur(100px) brightness(0.2); z-index: -2; transition: 0.8s; }
         #bg-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, transparent 0%, var(--bg) 95%); z-index: -1; }
 
-        .navbar { height: 60px; display: flex; align-items: center; padding: 0 20px; position: fixed; top: 0; width: 100%; z-index: 100; background: rgba(0,0,0,0.3); backdrop-filter: blur(10px); }
-        .nav-logo { font-weight: 900; color: var(--accent); letter-spacing: 2px; font-size: 14px; }
+        .navbar { height: 60px; display: flex; align-items: center; padding: 0 20px; position: fixed; top: 0; width: 100%; z-index: 100; background: rgba(0,0,0,0.4); backdrop-filter: blur(15px); }
+        .nav-logo { font-weight: 900; color: var(--accent); letter-spacing: 2px; font-size: 14px; text-shadow: var(--neon); }
 
         .content { height: 100vh; overflow-y: auto; padding: 80px 20px 120px 20px; display: none; }
-        .content.active { display: block; animation: fadeIn 0.3s ease; }
+        .content.active { display: block; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* PLAYER VIEW */
-        .player-view { display: flex; flex-direction: column; align-items: center; text-align: center; }
-        .album-art-main { width: 65vw; max-width: 250px; aspect-ratio: 1; border-radius: 30px; object-fit: cover; box-shadow: 0 20px 60px rgba(0,0,0,0.8); margin-bottom: 20px; }
-        .viz-container { display: flex; justify-content: center; align-items: flex-end; gap: 4px; height: 30px; margin-bottom: 15px; }
-        .viz-bar { width: 5px; background: var(--accent); border-radius: 3px; height: 4px; }
+        /* --- PLAYER VIEW --- */
+        .player-view { display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; }
+        .album-art-main { width: 65vw; max-width: 250px; aspect-ratio: 1; border-radius: 40px; object-fit: cover; box-shadow: 0 20px 80px rgba(0,0,0,1); margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); }
+        
+        #visualizer { width: 100%; height: 50px; margin-bottom: 10px; }
 
-        .song-title { font-size: 20px; font-weight: 900; margin: 0; }
-        .song-artist { color: var(--accent); font-weight: 700; margin: 5px 0 15px 0; font-size: 13px; }
+        .side-vol-wrapper { position: absolute; right: -10px; top: 35%; display: flex; flex-direction: column; align-items: center; z-index: 100; }
+        .vol-btn { background: var(--surface); border: none; color: white; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: var(--neon); }
+        .vol-slider-container { background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); padding: 25px 5px; border-radius: 20px; display: none; flex-direction: column; align-items: center; margin-top: 10px; border: 1px solid var(--accent); }
+        .vol-slider-container.show { display: flex; }
+        .vol-slider-vertical { -webkit-appearance: none; width: 100px; height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; transform: rotate(-90deg); margin: 50px -40px; outline: none; }
+        .vol-slider-vertical::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; background: white; border-radius: 50%; box-shadow: var(--neon); }
 
-        /* VOL & EQ */
-        .vol-wrapper { margin-bottom: 20px; display: flex; flex-direction: column; align-items: center; }
-        .vol-trigger { background: var(--surface); border: none; color: white; width: 42px; height: 42px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        .vol-trigger.active { background: var(--accent); }
-        .vol-box { width: 100%; max-width: 240px; background: rgba(255,255,255,0.1); padding: 12px 20px; border-radius: 30px; margin-top: 10px; display: none; align-items: center; gap: 10px; }
-        .vol-box.show { display: flex; animation: slideDown 0.3s ease; }
-        .vol-slider { -webkit-appearance: none; flex: 1; height: 12px; background: rgba(255,255,255,0.1); border-radius: 10px; outline: none; overflow: hidden; }
-        .vol-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 0; box-shadow: -400px 0 0 400px white; }
+        /* NEON PROGRESS */
+        .controls { width: 100%; max-width: 380px; }
+        .bar-bg { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; cursor: pointer; margin-bottom: 10px; position: relative; }
+        .bar-fill { height: 100%; background: var(--accent); width: 0%; border-radius: 10px; box-shadow: var(--neon); position: relative; }
+        .bar-fill::after { content: ''; position: absolute; right: -5px; top: 50%; transform: translateY(-50%); width: 12px; height: 12px; background: white; border-radius: 50%; box-shadow: var(--neon); }
+        .times { display: flex; justify-content: space-between; font-size: 11px; font-weight: 900; margin-bottom: 20px; }
 
-        .main-btns { display: flex; align-items: center; justify-content: center; gap: 30px; margin-bottom: 25px; }
-        .play-circle { width: 60px; height: 60px; background: white; color: black; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .main-btns { display: flex; align-items: center; justify-content: center; gap: 35px; margin-bottom: 25px; }
+        .play-circle { width: 65px; height: 65px; background: white; color: black; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: var(--neon); }
 
-        .panel { width: 100%; max-width: 400px; margin-top: 15px; padding: 20px; border-radius: 25px; background: var(--surface); display: none; border: 1px solid rgba(255,255,255,0.05); }
+        .panel { width: 100%; max-width: 400px; margin-top: 15px; padding: 20px; border-radius: 25px; background: rgba(0,0,0,0.7); display: none; border: 1px solid var(--accent); }
         .panel.active { display: block; }
         .preset-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 20px; }
-        .pre-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; font-size: 8px; padding: 8px 2px; border-radius: 8px; cursor: pointer; font-weight: bold; text-transform: uppercase; }
-        .pre-btn.active { border-color: var(--accent); background: rgba(157, 78, 221, 0.3); }
+        .pre-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; font-size: 8px; padding: 8px 2px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .pre-btn.active { background: var(--accent); box-shadow: var(--neon); border-color: white; }
 
-        /* --- LIBRARY --- */
+        /* --- LIBRARY VIEW --- */
         .search-box { position: relative; margin-bottom: 15px; }
-        .search-input { width: 100%; background: var(--surface); border: 1px solid rgba(255,255,255,0.05); padding: 12px 15px 12px 40px; border-radius: 15px; color: white; outline: none; font-size: 14px; }
+        .search-input { width: 100%; background: var(--surface); border: 1px solid rgba(255,255,255,0.1); padding: 12px 15px 12px 40px; border-radius: 15px; color: white; outline: none; }
         .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-dim); }
         .view-controls { display: flex; gap: 10px; margin-bottom: 15px; }
         .view-btn { background: var(--surface); border: none; color: var(--text-dim); padding: 8px 12px; border-radius: 10px; cursor: pointer; }
-        .view-btn.active { background: var(--accent); color: white; }
+        .view-btn.active { background: var(--accent); color: white; box-shadow: var(--neon); }
 
-        /* GRID MODE */
-        .grid-container { display: grid; gap: 12px; }
-        .grid-container.grid-mode { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
-        .grid-container.grid-mode .song-card { background: var(--surface); padding: 10px; border-radius: 15px; display: flex; flex-direction: column; align-items: center; }
+        .grid-container.grid-mode { display: grid; grid-template-columns: repeat(auto-fill, minmax(105px, 1fr)); gap: 12px; }
+        .grid-container.grid-mode .song-card { background: var(--surface); padding: 10px; border-radius: 15px; text-align: center; }
         .grid-container.grid-mode .song-card img { width: 100%; aspect-ratio: 1; border-radius: 12px; object-fit: cover; }
-        .grid-container.grid-mode .song-card .info { margin-top: 8px; font-size: 11px; font-weight: 800; text-align: center; }
+        
+        .grid-container.list-mode .song-card { background: var(--surface); padding: 12px; border-radius: 15px; display: flex; align-items: center; gap: 15px; margin-bottom: 10px; }
+        .grid-container.list-mode .song-card img { width: 55px; height: 55px; border-radius: 10px; }
+        .grid-container.list-mode .song-card .info { font-size: 14px; font-weight: 700; }
 
-        /* LIST MODE */
-        .grid-container.list-mode { grid-template-columns: 1fr; }
-        .grid-container.list-mode .song-card { background: var(--surface); padding: 12px; border-radius: 15px; display: flex; align-items: center; gap: 15px; }
-        .grid-container.list-mode .song-card img { width: 55px; height: 55px; border-radius: 10px; object-fit: cover; }
-        .grid-container.list-mode .song-card .info { text-align: left; font-size: 14px; font-weight: 700; color: var(--text); }
-
-        /* CONTACT */
-        .contact-card { background: var(--surface); padding: 30px 20px; border-radius: 25px; text-align: center; border: 1px solid rgba(157, 78, 221, 0.2); }
-        .contact-btn { display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; margin: 10px 0; text-decoration: none; color: white; font-weight: 700; font-size: 14px; }
-        .footer-text { margin-top: 40px; font-size: 10px; font-weight: 900; opacity: 0.4; letter-spacing: 2px; }
-
-        .nav-bottom { height: 75px; display: flex; align-items: center; justify-content: space-around; background: rgba(0,0,0,0.95); backdrop-filter: blur(20px); position: fixed; bottom: 0; width: 100%; border-top: 1px solid rgba(255,255,255,0.05); }
-        .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-dim); cursor: pointer; }
-        .nav-item.active { color: var(--accent); }
-        .nav-item span { font-size: 9px; margin-top: 5px; font-weight: 800; }
-
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        /* --- CONTACT --- */
+        .contact-card { background: var(--surface); padding: 30px 20px; border-radius: 25px; text-align: center; border: 1px solid var(--accent); }
+        .contact-btn { display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; margin: 10px 0; text-decoration: none; color: white; font-weight: 700; }
+        
+        .nav-bottom { height: 75px; display: flex; align-items: center; justify-content: space-around; background: rgba(0,0,0,0.95); backdrop-filter: blur(20px); position: fixed; bottom: 0; width: 100%; border-top: 1px solid rgba(157, 78, 221, 0.2); }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-dim); }
+        .nav-item.active { color: var(--accent); text-shadow: var(--neon); }
     </style>
 </head>
 <body>
@@ -103,53 +97,52 @@
 
     <div id="tab-home-content" class="content active">
         <div class="player-view">
-            <img src="" id="p-img" class="album-art-main" onerror="this.src='https://via.placeholder.com/300/111/9d4edd?text=ER'">
-            <div class="viz-container">
-                <div class="viz-bar"></div><div class="viz-bar"></div><div class="viz-bar"></div><div class="viz-bar"></div><div class="viz-bar"></div><div class="viz-bar"></div><div class="viz-bar"></div><div class="viz-bar"></div>
+            <div class="side-vol-wrapper">
+                <button class="vol-btn" onclick="toggleSideVol()"><i data-lucide="volume-2" size="20"></i></button>
+                <div class="vol-slider-container" id="side-vol-box">
+                    <input type="range" class="vol-slider-vertical" min="0" max="1" step="0.01" value="1" oninput="audio.volume = this.value">
+                </div>
             </div>
-            <h1 class="song-title" id="p-title">Pilih Lagu</h1>
-            <p class="song-artist" id="p-artist">Ewinth Revenge</p>
+
+            <img src="" id="p-img" class="album-art-main" onerror="this.src='https://via.placeholder.com/300/111/9d4edd?text=ER'">
+            <canvas id="visualizer"></canvas>
+
+            <h1 class="song-title" id="p-title" style="font-size: 20px; margin: 0;">Pilih Lagu</h1>
+            <p class="song-artist" id="p-artist" style="color: var(--accent); font-weight: 800; font-size: 13px; margin: 5px 0 15px 0;">EWINTH REVENGE</p>
 
             <div class="controls">
                 <div class="bar-bg" id="seek-bar"><div class="bar-fill" id="bar-fill"></div></div>
                 <div class="times"><span id="time-now">0:00</span><span id="time-total">0:00</span></div>
-                
-                <div class="vol-wrapper">
-                    <button class="vol-trigger" id="vol-btn" onclick="toggleVolume()"><i data-lucide="volume-2" size="18"></i></button>
-                    <div class="vol-box" id="vol-box">
-                        <input type="range" class="vol-slider" min="0" max="1" step="0.01" value="1" oninput="audio.volume = this.value">
-                    </div>
-                </div>
 
                 <div class="main-btns">
                     <i data-lucide="skip-back" onclick="prev()"></i>
-                    <div class="play-circle" onclick="toggle()"><i data-lucide="play" id="play-icon" size="26"></i></div>
+                    <div class="play-circle" onclick="toggle()"><i data-lucide="play" id="play-icon" size="30"></i></div>
                     <i data-lucide="skip-forward" onclick="next()"></i>
                 </div>
 
                 <div style="display:flex; justify-content:center; gap:10px;">
-                    <button class="view-btn active" onclick="togglePanel('lyrics')">LIRIK</button>
-                    <button class="view-btn active" onclick="togglePanel('eq')">EQ PRO</button>
+                    <button class="pre-btn" style="padding: 10px 20px;" onclick="togglePanel('lyrics')">LYRICS</button>
+                    <button class="pre-btn" style="padding: 10px 20px;" onclick="togglePanel('eq')">EQ PRO</button>
                 </div>
 
                 <div class="panel" id="eq-panel">
                     <div class="preset-grid" id="preset-render"></div>
                     <div style="display:flex; flex-direction:column; gap:10px;">
-                        <div style="display:flex; align-items:center; gap:10px;"><span style="font-size:9px; width:40px;">BASS</span><input type="range" class="vol-slider" min="0" max="2" step="0.1" value="1" oninput="setEQ('bass', this.value)"></div>
-                        <div style="display:flex; align-items:center; gap:10px;"><span style="font-size:9px; width:40px;">MID</span><input type="range" class="vol-slider" min="0" max="2" step="0.1" value="1" oninput="setEQ('mid', this.value)"></div>
-                        <div style="display:flex; align-items:center; gap:10px;"><span style="font-size:9px; width:40px;">TREB</span><input type="range" class="vol-slider" min="0" max="2" step="0.1" value="1" oninput="setEQ('treble', this.value)"></div>
+                        <div style="display:flex; align-items:center; gap:10px;"><span style="font-size:9px; width:40px; color:var(--accent);">BASS</span><input type="range" class="vol-slider-vertical" style="transform:none; width:100%; height:8px; margin:0;" min="0" max="2" step="0.1" value="1" oninput="setEQ('bass', this.value)"></div>
+                        <div style="display:flex; align-items:center; gap:10px;"><span style="font-size:9px; width:40px; color:var(--accent);">MID</span><input type="range" class="vol-slider-vertical" style="transform:none; width:100%; height:8px; margin:0;" min="0" max="2" step="0.1" value="1" oninput="setEQ('mid', this.value)"></div>
+                        <div style="display:flex; align-items:center; gap:10px;"><span style="font-size:9px; width:40px; color:var(--accent);">TREB</span><input type="range" class="vol-slider-vertical" style="transform:none; width:100%; height:8px; margin:0;" min="0" max="2" step="0.1" value="1" oninput="setEQ('treble', this.value)"></div>
                     </div>
                 </div>
-                <div class="panel" id="lyrics-panel"><div id="lyrics-content" style="font-size:13px; line-height:1.7; opacity:0.6;"></div></div>
+                <div class="panel" id="lyrics-panel"><div id="lyrics-content" style="font-size:14px; line-height:1.6; text-shadow: var(--neon);"></div></div>
             </div>
         </div>
     </div>
 
     <div id="tab-explore-content" class="content">
-        <h2 style="margin: 0 0 20px 0; font-weight: 900;">LIBRARY</h2>
+        <h2 style="font-weight:900;">LIBRARY</h2>
         <div class="search-box">
             <i data-lucide="search" size="18" class="search-icon"></i>
-            <input type="text" class="search-input" id="search-input" placeholder="Cari musik..." onkeyup="filterSongs()">
+            <input type="text" class="search-input" id="search-input" placeholder="Cari judul lagu..." onkeyup="filterSongs()">
         </div>
         <div class="view-controls">
             <button class="view-btn active" id="grid-btn" onclick="setLibraryView('grid')"><i data-lucide="layout-grid" size="18"></i></button>
@@ -160,57 +153,65 @@
 
     <div id="tab-contact-content" class="content">
         <div class="contact-card">
-            <h2 style="margin-bottom:25px; font-weight:900;">KONTAK</h2>
+            <h2 style="font-weight:900; margin-bottom:20px;">HUBUNGI SAYA</h2>
             <a href="mailto:ceritasemalam001@gmail.com" class="contact-btn"><i data-lucide="mail" style="margin-right:12px"></i> ceritasemalam001@gmail.com</a>
             <a href="https://wa.me/6283862722618" class="contact-btn"><i data-lucide="message-circle" style="margin-right:12px"></i> 083862722618</a>
-            <div class="footer-text">2026 POWERED BY <span style="color:var(--accent)">EWINTH REVENGE</span></div>
+            <div style="margin-top:40px; font-size:10px; font-weight:900; opacity:0.5; letter-spacing:2px;">2026 POWERED BY <span style="color:var(--accent)">EWINTH REVENGE</span></div>
         </div>
     </div>
 
     <div class="nav-bottom">
-        <div class="nav-item active" onclick="switchTab('home')" id="nav-home"><i data-lucide="music"></i><span>PLAYER</span></div>
-        <div class="nav-item" onclick="switchTab('explore')" id="nav-explore"><i data-lucide="layout-grid"></i><span>LIBRARY</span></div>
-        <div class="nav-item" onclick="switchTab('contact')" id="nav-contact"><i data-lucide="mail"></i><span>KONTAK</span></div>
+        <div class="nav-item active" onclick="switchTab('home')" id="nav-home"><i data-lucide="music"></i><span style="font-size:9px; font-weight:800; margin-top:5px;">PLAYER</span></div>
+        <div class="nav-item" onclick="switchTab('explore')" id="nav-explore"><i data-lucide="layout-grid"></i><span style="font-size:9px; font-weight:800; margin-top:5px;">LIBRARY</span></div>
+        <div class="nav-item" onclick="switchTab('contact')" id="nav-contact"><i data-lucide="mail"></i><span style="font-size:9px; font-weight:800; margin-top:5px;">KONTAK</span></div>
     </div>
 
-    <audio id="audio-player"></audio>
+    <audio id="audio-player" crossorigin="anonymous"></audio>
 
     <script>
         const audio = document.getElementById('audio-player');
-        let index = 0, vizInt, audioCtx, source, bassNode, midNode, trebleNode;
-        let currentView = 'grid';
+        let audioCtx, analyser, source, bassNode, midNode, trebleNode, currentView = 'grid';
+        const canvas = document.getElementById('visualizer');
+        const ctx = canvas.getContext('2d');
 
         const songs = [
             { title: "Left For Dead", artist: "Ewinth Revenge", file: "left for dead.mp3", img: "left for dead.jpeg", lirik: "Terjebak dalam sepi..." },
             { title: "Takdir Memisahkan", artist: "Ewinth Revenge", file: "takdir memisahkan.mp3", img: "takdir memisahkan.jpeg", lirik: "Berjalan sendiri..." }
         ];
 
-        const presets = { 
-            'Normal': [1,1,1], 'Bass': [1.9,1.1,0.6], 'Rock': [1.6,0.8,1.5], 'Pop': [1.1,1.4,1.3], 
-            'Jazz': [1.2,1.2,1.5], 'Classic': [0.9,1.1,1.7], 'Dance': [1.8,1,1.5], 'Electro': [1.6,1,1.9],
-            'Vocal': [0.7,1.8,1.2], 'Treble': [0.6,1,2.0]
-        };
-
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                const swCode = `self.addEventListener('fetch', function(event) { event.respondWith(fetch(event.request)); });`;
-                const blob = new Blob([swCode], {type: 'text/javascript'});
-                navigator.serviceWorker.register(URL.createObjectURL(blob));
-            });
-        }
+        const presets = { 'Normal': [1,1,1], 'Bass': [1.9,1.1,0.6], 'Rock': [1.6,0.8,1.5], 'Pop': [1.1,1.4,1.3], 'Jazz': [1.2,1.2,1.5], 'Classic': [0.9,1.1,1.7], 'Dance': [1.8,1,1.5], 'Electro': [1.6,1,1.9], 'Vocal': [0.7,1.8,1.2], 'Treble': [0.6,1,2.0] };
 
         function initAudio() {
             if (audioCtx) return;
             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             source = audioCtx.createMediaElementSource(audio);
+            analyser = audioCtx.createAnalyser();
             bassNode = audioCtx.createBiquadFilter(); bassNode.type = 'lowshelf'; bassNode.frequency.value = 250;
             midNode = audioCtx.createBiquadFilter(); midNode.type = 'peaking'; midNode.frequency.value = 1000;
             trebleNode = audioCtx.createBiquadFilter(); trebleNode.type = 'highshelf'; trebleNode.frequency.value = 4000;
-            source.connect(bassNode); bassNode.connect(midNode); midNode.connect(trebleNode); trebleNode.connect(audioCtx.destination);
+            source.connect(analyser); analyser.connect(bassNode); bassNode.connect(midNode); midNode.connect(trebleNode); trebleNode.connect(audioCtx.destination);
+            drawVisualizer();
         }
 
+        function drawVisualizer() {
+            requestAnimationFrame(drawVisualizer);
+            const bufferLength = analyser.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
+            analyser.getByteFrequencyData(dataArray);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const barWidth = (canvas.width / 45);
+            let x = 0;
+            for(let i = 0; i < 45; i++) {
+                const barHeight = dataArray[i] / 5;
+                ctx.fillStyle = '#9d4edd';
+                ctx.shadowBlur = 8; ctx.shadowColor = '#9d4edd';
+                ctx.fillRect(x, canvas.height - barHeight, barWidth - 2, barHeight);
+                x += barWidth;
+            }
+        }
+
+        function toggleSideVol() { document.getElementById('side-vol-box').classList.toggle('show'); }
         function setEQ(band, v) { initAudio(); let gain = (v - 1) * 20; if(band==='bass') bassNode.gain.value = gain; if(band==='mid') midNode.gain.value = gain; if(band==='treble') trebleNode.gain.value = gain; }
-        
         function applyPre(name, btn) {
             document.querySelectorAll('.pre-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
@@ -218,7 +219,6 @@
             setEQ('bass', b); setEQ('mid', m); setEQ('treble', t);
         }
 
-        function toggleVolume() { document.getElementById('vol-box').classList.toggle('show'); document.getElementById('vol-btn').classList.toggle('active'); }
         function togglePanel(p) {
             const panel = document.getElementById(p + '-panel');
             const isActive = panel.classList.contains('active');
@@ -241,12 +241,11 @@
             container.innerHTML = filtered.map(s => `
                 <div class="song-card" onclick="playSong(${songs.indexOf(s)})">
                     <img src="${encodeURIComponent(s.img)}" onerror="this.src='https://via.placeholder.com/150/111/9d4edd?text=ER'">
-                    <div class="info">${s.title}</div>
-                </div>
-            `).join('');
+                    <div class="info" style="margin-top:8px;">${s.title}</div>
+                </div>`).join('');
         }
 
-        function playSong(i) { index = i; loadSong(i); audio.play(); updateUI(true); startViz(); switchTab('home'); }
+        function playSong(i) { loadSong(i); audio.play(); updateUI(true); switchTab('home'); initAudio(); }
         function loadSong(i) {
             const s = songs[i];
             audio.src = encodeURIComponent(s.file);
@@ -256,9 +255,7 @@
             document.getElementById('lyrics-content').innerText = s.lirik;
         }
 
-        function toggle() { initAudio(); if(audio.paused) { audio.play(); startViz(); updateUI(true); } else { audio.pause(); stopViz(); updateUI(false); } }
-        function startViz() { clearInterval(vizInt); vizInt = setInterval(() => { document.querySelectorAll('.viz-bar').forEach(b => b.style.height = (Math.random()*25+5)+'px'); }, 100); }
-        function stopViz() { clearInterval(vizInt); document.querySelectorAll('.viz-bar').forEach(b => b.style.height = '4px'); }
+        function toggle() { initAudio(); audio.paused ? audio.play() : audio.pause(); updateUI(!audio.paused); }
         function updateUI(p) { document.getElementById('play-icon').setAttribute('data-lucide', p?'pause':'play'); lucide.createIcons(); }
 
         function switchTab(t) { 
@@ -267,9 +264,6 @@
             document.getElementById(`tab-${t}-content`).classList.add('active');
             document.getElementById(`nav-${t}`).classList.add('active');
         }
-
-        function next() { index = (index + 1) % songs.length; playSong(index); }
-        function prev() { index = (index - 1 + songs.length) % songs.length; playSong(index); }
 
         audio.ontimeupdate = () => { if(audio.duration) { 
             document.getElementById('bar-fill').style.width = (audio.currentTime/audio.duration)*100+"%"; 
@@ -280,9 +274,7 @@
         document.getElementById('seek-bar').onclick = (e) => audio.currentTime = (e.offsetX / e.currentTarget.offsetWidth) * audio.duration;
 
         document.getElementById('preset-render').innerHTML = Object.keys(presets).map(name => `<button class="pre-btn" onclick="applyPre('${name}', this)">${name}</button>`).join('');
-        loadSong(0);
-        filterSongs();
-        lucide.createIcons();
+        loadSong(0); filterSongs(); lucide.createIcons();
     </script>
 </body>
 </html>
