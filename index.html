@@ -47,20 +47,13 @@
         .logo-symbol { font-size: 35px; font-weight: 900; color: var(--gold); text-shadow: 0 0 10px var(--gold); }
         .logo-text { font-weight: 900; letter-spacing: 2px; color: var(--gold); font-size: 14px; text-transform: uppercase; }
 
-        /* PANEL KIRI: WA & EMAIL (WARNA GOLD) */
+        /* PANEL KIRI: WA & EMAIL */
         .sidebar-footer { 
             margin-top: auto; 
             padding-top: 20px; 
             border-top: 1px solid #1a1a1a; 
         }
-        .contact-title { 
-            font-size: 10px; 
-            color: #555; 
-            letter-spacing: 1px; 
-            margin-bottom: 15px; 
-            text-transform: uppercase; 
-            font-weight: bold; 
-        }
+        .contact-title { font-size: 10px; color: #555; letter-spacing: 1px; margin-bottom: 15px; text-transform: uppercase; font-weight: bold; }
         .contact-item { 
             display: flex; 
             align-items: center; 
@@ -72,12 +65,12 @@
             text-decoration: none; 
             transition: 0.2s;
         }
-        .contact-item:hover { transform: translateX(5px); text-shadow: 0 0 8px var(--gold-glow); opacity: 0.8; }
+        .contact-item:hover { transform: translateX(5px); text-shadow: 0 0 8px var(--gold-glow); }
 
         /* MAIN CONTENT */
         .main-view { flex: 1; background: linear-gradient(180deg, #181818 0%, #050505 100%); overflow-y: auto; padding: 40px; padding-bottom: 120px; }
         .header { display: flex; align-items: flex-end; gap: 30px; margin-bottom: 40px; }
-        .playlist-art { width: 180px; height: 180px; background: #111; border-radius: 8px; border: 1px solid var(--gold); overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+        .playlist-art { width: 180px; height: 180px; background: #111; border-radius: 8px; border: 1px solid var(--gold); overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; }
         .playlist-art img { width: 100%; height: 100%; object-fit: cover; }
 
         .tracklist { width: 100%; border-collapse: collapse; }
@@ -88,16 +81,16 @@
         .tracklist tr.playing td { color: var(--gold); font-weight: bold; background: rgba(212,175,55,0.05); }
         
         .row-info { display: flex; align-items: center; gap: 12px; }
-        .row-img { width: 40px; height: 40px; border-radius: 4px; border: 1px solid #333; }
+        .row-img { width: 40px; height: 40px; border-radius: 4px; border: 1px solid #333; object-fit: cover; }
 
-        /* PLAYER BAR (BOTTOM) */
+        /* PLAYER BAR */
         .player-bar { 
             position: fixed; bottom: 0; width: 100%; height: 95px; 
             background: #080808; border-top: 1px solid #1a1a1a; 
             display: flex; align-items: center; padding: 0 30px; justify-content: space-between; z-index: 100;
         }
         .info-song { display: flex; align-items: center; gap: 15px; width: 30%; }
-        .mini-art { width: 55px; height: 55px; border-radius: 4px; border: 1px solid var(--gold); overflow: hidden; background: #000; }
+        .mini-art { width: 55px; height: 55px; border-radius: 4px; border: 1px solid var(--gold); overflow: hidden; background: #000; display: flex; align-items: center; justify-content: center; }
         .mini-art img { width: 100%; height: 100%; object-fit: cover; }
         
         .player-controls { display: flex; flex-direction: column; align-items: center; gap: 8px; flex: 1; }
@@ -133,7 +126,7 @@
     <div class="main-view">
         <div class="header">
             <div class="playlist-art" id="main-cover">
-                <div class="logo-symbol" style="font-size: 70px; display: flex; justify-content: center; align-items: center; height: 100%;">ER</div>
+                <div class="logo-symbol" style="font-size: 70px;">ER</div>
             </div>
             <div>
                 <p style="font-size: 11px; font-weight: bold; color: var(--gold); letter-spacing: 2px;">OFFICIAL</p>
@@ -144,7 +137,7 @@
 
         <table class="tracklist">
             <thead>
-                <tr><th style="width: 40px;">#</th><th>JUDUL LAGU</th><th>ARTIS</th><th style="text-align: right;">AKSI</th></tr>
+                <tr><th style="width: 40px;">#</th><th>JUDUL LAGU</th><th>ARTIS</th><th style="text-align: right;">FORMAT</th></tr>
             </thead>
             <tbody id="list-lagu"></tbody>
         </table>
@@ -153,7 +146,7 @@
     <div class="player-bar">
         <div class="info-song">
             <div class="mini-art" id="player-mini-art">
-                <div style="font-size: 18px; font-weight: 900; color: var(--gold); text-align: center; line-height: 55px;">ER</div>
+                <div style="font-size: 18px; font-weight: 900; color: var(--gold);">ER</div>
             </div>
             <div>
                 <div id="p-title" style="font-weight: bold; font-size: 14px; color: white;">Pilih Lagu</div>
@@ -185,20 +178,18 @@
         const player = document.getElementById('player');
         let index = 0;
 
-        // ============================================================
-        // DAFTAR LAGU MANUAL (Isi Judul, Cover, dan Link MP3 di sini)
-        // ============================================================
+        // DATA LAGU MANUAL DARI GITHUB ANDA
         const songs = [
             {
-                title: "left for dead",
+                title: "Left For Dead",
                 artist: "Ewinth Revenge",
-                cover: "left for dead.jpg", 
+                cover: "https://raw.githubusercontent.com/jvngwe9991/jvngwe9991.github.io/main/left for dead.jpeg", 
                 url: "https://raw.githubusercontent.com/jvngwe9991/jvngwe9991.github.io/main/left for dead.mp3"
             },
             {
-                title: "takdir memisahkan",
+                title: "Takdir Memisahkan",
                 artist: "Ewinth Revenge",
-                cover: "takdir memisahkan.jpg",
+                cover: "https://raw.githubusercontent.com/jvngwe9991/jvngwe9991.github.io/main/takdir memisahkan.jpeg",
                 url: "https://raw.githubusercontent.com/jvngwe9991/jvngwe9991.github.io/main/takdir memisahkan.mp3"
             }
         ];
@@ -215,7 +206,7 @@
                         </div>
                     </td>
                     <td>${s.artist}</td>
-                    <td style="text-align:right; font-size: 11px; color: var(--gold);">PLAYING</td>
+                    <td style="text-align:right; font-family:monospace; color:var(--gold);">MP3</td>
                 </tr>
             `).join('');
         }
@@ -227,7 +218,6 @@
             document.getElementById('p-title').innerText = songs[i].title;
             document.getElementById('p-artist').innerText = songs[i].artist;
             
-            // Update Gambar Cover
             const coverHTML = `<img src="${songs[i].cover}" onerror="this.parentElement.innerHTML='ER'">`;
             document.getElementById('main-cover').innerHTML = coverHTML;
             document.getElementById('player-mini-art').innerHTML = coverHTML;
