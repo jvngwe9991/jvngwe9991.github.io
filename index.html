@@ -102,7 +102,6 @@
             <canvas id="visualizer"></canvas>
             <h1 id="p-title" style="font-size: 18px; margin: 0; font-weight: 900;">Pilih Lagu</h1>
             <p id="p-artist" style="color: var(--accent); font-weight: 800; font-size: 11px; margin: 5px 0 20px 0;">EWINTH REVENGE</p>
-
             <div class="controls">
                 <div class="bar-bg" id="seek-bar"><div class="bar-fill" id="bar-fill"></div></div>
                 <div style="display:flex; justify-content:space-between; font-size:10px; margin-bottom:15px; font-weight:900;">
@@ -175,16 +174,21 @@
     <audio id="audio-player" crossorigin="anonymous"></audio>
 
     <script>
+        /* REGISTER SERVICE WORKER FOR PWA */
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').then(r => console.log('SW Active')).catch(e => console.log('SW Fail'));
+            });
+        }
+
         const audio = document.getElementById('audio-player');
         let audioCtx, analyser, source, bassNode, midNode, trebleNode, index = 0, currentView = 'grid', volTimer;
         const canvas = document.getElementById('visualizer');
         const ctx = canvas.getContext('2d');
 
-        /* CARA MENAMBAHKAN LAGU: Cukup tambahkan baris di dalam kurung [ ] di bawah ini */
         const songs = [
             { title: "Left For Dead", artist: "Ewinth Revenge", file: "left for dead.mp3", img: "left for dead.jpeg", lirik: "Terjebak dalam sepi...\nWaktu seolah berhenti..." },
-            { title: "Takdir Memisahkan", artist: "Ewinth Revenge", file: "takdir memisahkan.mp3", img: "takdir memisahkan.jpeg", lirik: "Berjalan di bawah hujan...\nMencari arti kenangan..." },
-            /* Contoh tambah lagu: { title: "Judul Lagu", artist: "Ewinth Revenge", file: "namafile.mp3", img: "gambar.jpg", lirik: "Lirik di sini" }, */
+            { title: "Takdir Memisahkan", artist: "Ewinth Revenge", file: "takdir memisahkan.mp3", img: "takdir memisahkan.jpeg", lirik: "Berjalan di bawah hujan...\nMencari arti kenangan..." }
         ];
 
         const presets = { 'Normal': [1,1,1], 'Bass': [1.8,1,0.6], 'Rock': [1.5,0.8,1.4], 'Pop': [1.1,1.3,1.2], 'Jazz': [1.2,1.1,1.4], 'Classic': [0.8,1,1.6], 'Dance': [1.7,1,1.5], 'Electro': [1.6,1,1.8], 'Vocal': [0.6,1.7,1.1], 'Treble': [0.5,1,1.9] };
@@ -225,6 +229,11 @@
         }
 
         function setEQ(band, v) { initAudio(); let gain = (v - 1) * 20; if(band==='bass') bassNode.gain.value = gain; if(band==='mid') midNode.gain.value = gain; if(band==='treble') trebleNode.gain.value = gain; }
+        function applyPre(name) {
+            const [b, m, t] = presets[name]; setEQ('bass', b); setEQ('mid', m); setEQ('treble', t);
+            document.querySelectorAll('.eq-input')[0].value = b; document.querySelectorAll('.eq-input')[1].value = m; document.querySelectorAll('.eq-input')[2].value = t;
+        }
+
         function setView(v) { currentView = v; filterSongs(); }
 
         function filterSongs() {
